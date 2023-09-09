@@ -3,7 +3,8 @@
 
 void input_func(vector<vertex>&V, string filename){
   int N, M, s, f; //N-кол-во вершин, M-кол-во ребер, текщее ребро из s в f
-  vertex W; 
+  vertex W;
+  W.color = -1;
   if(filename == "null"){
     cin >> N;
     for (size_t i = 0; i < N; i++) {

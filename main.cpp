@@ -70,8 +70,9 @@ int main() {
 		  cout << Solution(V) << endl;
 	  }
   if(flag == 3) {
-     input_func(V, "null");
+    input_func(V, "null");
+    cout << Solution(V) << endl;
   }
-  cout << "End\n";
+  cout << "\nEnd\n";
   return 0;
 }
