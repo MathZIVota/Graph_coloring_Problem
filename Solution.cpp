@@ -1,48 +1,43 @@
 #include"Color.hpp"
 
-double Solver(int i, vector<vertex> &V, int max_color){
-  cout << "color: ";
-  for(auto v: V) cout << v.color << " ";
-  cout << endl;
-  
-  int used_color = 0;
+int UsedColors(vertex v, vector<vertex> V, vector<int> &used){
+  for(auto w: v.adj_vert){
+    int tmp_color = V[w].color;
+    if(tmp_color >= 0) used[tmp_color] = 1;
+  }
+  int s;
+  for(s=0; used[s] == 1; s++); 
+  for(auto &u: used) u = 0;
+  return s;
+}
+
+int Solver(int i, vector<vertex> &V, int max_color){
   list<int> temp;
   vector<int> color_used;
-  cout << endl;
-  for(int j=0; j<max_color; j++) {
-    color_used.push_back(0);
-    cout << color_used[j] << ", ";
-  }
-  cout << endl;
+  for(int j=0; j<max_color; j++) color_used.push_back(0);
+  
+
   temp.push_back(i);
   V[i].color = 0;
-  used_color++;
   int tmp = i;
   while(!temp.empty()){
-    cout << "! " << temp.front() << ":\n";
     for(auto v: V[tmp].adj_vert){
-      cout << "v-" << v << endl;
       if(V[v].color < 0) temp.push_back(v);
-      for(auto w: V[v].adj_vert){
-        cout << "w-" << w << " ";
-        int tmp_color = V[w].color;
-        cout << "tmp->" << tmp_color << endl;
-        if(tmp_color >= 0) color_used[tmp_color] = 1;
-      }
-      cout << endl;
-      int s;
-      for(s=0; s<max_color && color_used[s] == 1; s++); 
-      V[v].color = s;
+      V[v].color = UsedColors(V[v], V, color_used);
     }
-    for(auto &u: color_used) u = 0;
     temp.pop_front();
     if(!temp.empty()) tmp = temp.front();
-    cout << endl;
   }
-  cout << "color: ";
-  for(auto v: V) cout << v.color << " ";
-  cout << endl;
-  return 0;
+  for(auto v: V) {
+    
+  }
+  int num_color = -1;
+  for(auto &v: V) {
+    if(v.color < 0) v.color = UsedColors(v, V, color_used);
+    if(num_color < v.color) num_color = v.color;
+  }
+  
+  return (num_color+1);
 };
 
 int Solution(vector<vertex>&V){
@@ -50,7 +45,6 @@ int Solution(vector<vertex>&V){
   int max_adj = V.front().adj_vert.size();
   int max_adj_index = 0;
   for(size_t i=0; i<V.size(); i++) color.push_back(i);
-  
   for(size_t i=1; i<V.size(); i++){
     int tmp_adj = V[i].adj_vert.size();
     if(max_adj < tmp_adj) {
@@ -58,10 +52,8 @@ int Solution(vector<vertex>&V){
       max_adj_index = i;
     }
   }
-  
-  int Size = color.size();
   color.resize(max_adj+1);
-  Solver(max_adj_index, V, Size);
+  int num_color = Solver(max_adj_index, V, max_adj);
   
-  return max_adj;
+  return num_color;
 }

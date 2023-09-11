@@ -1,7 +1,7 @@
 #include"Color.hpp"
-#include<fstream>
 
-void input_func(vector<vertex>&V, string filename){
+
+void input_graph(vector<vertex>&V, string filename){
   int N, M, s, f; //N-кол-во вершин, M-кол-во ребер, текщее ребро из s в f
   vertex W;
   W.color = -1;
